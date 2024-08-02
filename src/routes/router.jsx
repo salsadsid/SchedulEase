@@ -1,17 +1,28 @@
-import React from "react";
+import Login from "@/pages/Login";
 import { createBrowserRouter } from "react-router-dom";
-import About from "../pages/About";
+import MainLayout from "../layout/MainLayout";
 import Home from "../pages/Home";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/about",
-    element: <About />,
+    element: <MainLayout />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+    ],
   },
 ]);
 
 export default router;
+
+//TODO
+/*
+ implement errorElement
+*/
