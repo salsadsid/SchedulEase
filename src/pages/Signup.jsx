@@ -8,26 +8,20 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { initialLoginFormValue } from "@/utils/utils";
-import { loginSchema } from "@/utils/validator";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
-const Login = () => {
-  const form = useForm({
-    resolver: yupResolver(loginSchema),
-    defaultValues: initialLoginFormValue,
-  });
+const Signup = () => {
+  const form = useForm();
   const onSubmit = (values) => console.log(values);
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[80vh]">
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">
-            <h1 className="text-3xl font-bold">Login</h1>
+            <h1 className="text-3xl font-bold">Sign up</h1>
             <p className="text-balance text-muted-foreground">
-              Hi, Welcome back 👋
+              Welcome to SchedulEase 👋
             </p>
           </div>
           <div className="grid gap-4">
@@ -36,6 +30,19 @@ const Login = () => {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-8"
               >
+                <FormField
+                  control={form.control}
+                  name="username"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Username</FormLabel>
+                      <FormControl>
+                        <Input placeholder="username" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="email"
@@ -73,9 +80,9 @@ const Login = () => {
             </Form>
           </div>
           <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{" "}
-            <Link to="/signup" className="underline">
-              Sign up
+            Already have an account?{" "}
+            <Link to="/login" className="underline">
+              Login
             </Link>
           </div>
         </div>
@@ -93,4 +100,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

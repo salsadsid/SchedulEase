@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import CompanyName from "./CompanyName";
 
 const Navbar = () => {
   return (
@@ -65,7 +66,7 @@ const Navbar = () => {
           to="/"
           className="flex items-center gap-2 text-lg font-semibold md:text-base"
         >
-          SchedulEase
+          <CompanyName className="text-lg" />
         </Link>
       </nav>
 
