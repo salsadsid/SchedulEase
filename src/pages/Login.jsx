@@ -8,18 +8,36 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/context/AuthContext";
+import { createPromiseToast } from "@/utils/promiseToast";
 import { initialLoginFormValue } from "@/utils/utils";
-import { loginSchema } from "@/utils/validator";
+
+import { loginFormSchema } from "@/utils/validator";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const form = useForm({
-    resolver: yupResolver(loginSchema),
+    resolver: yupResolver(loginFormSchema),
     defaultValues: initialLoginFormValue,
   });
-  const onSubmit = (values) => console.log(values);
+  const navigate = useNavigate();
+  const { signIn, loading, user, setLoading } = useAuth();
+  const onSubmit = async (values) => {
+    const toast = createPromiseToast();
+    const { successToast, errorToast } = toast();
+    try {
+      const result = await signIn(values.email, values.password);
+      if (user?.uid) successToast({ message: "Login Successful." });
+      navigate("/");
+    } catch (error) {
+      errorToast({ message: error.message });
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[80vh]">
       <div className="flex items-center justify-center py-12">
@@ -66,8 +84,16 @@ const Login = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full">
-                  Submit
+
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Please wait
+                    </>
+                  ) : (
+                    "Login"
+                  )}
                 </Button>
               </form>
             </Form>

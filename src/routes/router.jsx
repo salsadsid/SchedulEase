@@ -1,3 +1,5 @@
+import DashboardLayout from "@/layout/DashboardLayout";
+import MyAppointments from "@/pages/Dashboard/MyAppointments";
 import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
 import { createBrowserRouter } from "react-router-dom";
@@ -23,6 +25,16 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/dashboard",
+    element: <DashboardLayout />,
+    children: [
+      {
+        path: "",
+        element: <MyAppointments />,
+      },
+    ],
+  },
 ]);
 
 export default router;
@@ -31,4 +43,5 @@ export default router;
 /*
  implement errorElement
  remove unused css shadcn theme 
+remove unused shadcn components : alert
 */

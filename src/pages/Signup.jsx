@@ -8,12 +8,44 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/context/AuthContext";
+import { createUser } from "@/services/userServices";
+import { createPromiseToast } from "@/utils/promiseToast";
+import { initialSignupFormValue } from "@/utils/utils";
+import { signUpFormSchema } from "@/utils/validator";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
-  const form = useForm();
-  const onSubmit = (values) => console.log(values);
+  const { signUp, user, loading, setLoading } = useAuth();
+  const navigate = useNavigate();
+  const form = useForm({
+    resolver: yupResolver(signUpFormSchema),
+    defaultValues: initialSignupFormValue,
+  });
+  const onSubmit = async (values) => {
+    const toast = createPromiseToast();
+    const { successToast, errorToast } = toast();
+    try {
+      const userCredential = await signUp(values.email, values.password);
+      const user = userCredential.user;
+      console.log(user);
+      await createUser({
+        id: user.uid,
+        name: values.name,
+        email: values.email,
+        createdAt: new Date(),
+      });
+      successToast({ message: "Signup Successful..." });
+    } catch (error) {
+      console.log(error);
+      errorToast({ message: error.message });
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[80vh]">
       <div className="flex items-center justify-center py-12">
@@ -32,12 +64,12 @@ const Signup = () => {
               >
                 <FormField
                   control={form.control}
-                  name="username"
+                  name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Username</FormLabel>
+                      <FormLabel>Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="username" {...field} />
+                        <Input placeholder="name" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -73,8 +105,15 @@ const Signup = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full">
-                  Submit
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Please wait
+                    </>
+                  ) : (
+                    "Sign up"
+                  )}
                 </Button>
               </form>
             </Form>
