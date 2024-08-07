@@ -28,4 +28,5 @@ export const appointmentSchema = Yup.object().shape({
   description: Yup.string().required("Description is required"),
   date: Yup.date().required("Date is required"),
   time: Yup.string().required("Time is required"),
+  audioMessage: Yup.mixed().nullable(),
 });

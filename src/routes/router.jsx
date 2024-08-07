@@ -1,5 +1,7 @@
 import DashboardLayout from "@/layout/DashboardLayout";
-import MyAppointments from "@/pages/Dashboard/MyAppointments";
+
+import ReceivedAppointments from "@/pages/Dashboard/ReceivedAppointments";
+import SentAppointments from "@/pages/Dashboard/SentAppointments";
 import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
 import { createBrowserRouter } from "react-router-dom";
@@ -26,12 +28,16 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/dashboard",
+    path: "/appointment",
     element: <DashboardLayout />,
     children: [
       {
         path: "",
-        element: <MyAppointments />,
+        element: <ReceivedAppointments />,
+      },
+      {
+        path: "sent",
+        element: <SentAppointments />,
       },
     ],
   },

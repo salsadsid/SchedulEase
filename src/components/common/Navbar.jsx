@@ -81,7 +81,7 @@ const Navbar = () => {
           <div className="ml-auto flex-1 sm:flex-initial">
             <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
               <Link
-                to="/dashboard"
+                to="/appointment"
                 className="text-muted-foreground transition-colors hover:text-foreground"
               >
                 Dashboard
@@ -113,15 +113,21 @@ const Navbar = () => {
           </DropdownMenu>
         </div>
       </header>
-      {location.pathname.includes("/dashboard") && (
+      {location.pathname.includes("/appointment") && (
         <main className="md:flex hidden   min-h-[calc(100vh_-_theme(spacing.16))] w-full flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
           <div className="mx-auto lg:mx-4 grid w-full max-w-6xl gap-2">
             <h1 className="text-3xl font-semibold">Dashboard</h1>
           </div>
           <div className="mx-auto lg:mx-4 grid w-full max-w-6xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr] ">
             <nav className="grid gap-4 text-sm text-muted-foreground">
-              <Link href="#" className="font-semibold text-primary">
-                My Appointments
+              <Link to="/appointment" className="font-semibold text-primary">
+                Received Appointments
+              </Link>
+              <Link
+                to="/appointment/sent"
+                className="font-semibold text-primary"
+              >
+                Sent Appointments
               </Link>
             </nav>
             <div className="grid gap-6">
