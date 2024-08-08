@@ -68,3 +68,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+a.active {
+  color: #7800d0;
+}

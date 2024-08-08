@@ -1,23 +1,22 @@
+import { useAuth } from "@/context/AuthContext";
 import { CircleUser, Menu, Package2 } from "lucide-react";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import CompanyName from "./CompanyName";
 
-const Navbar = () => {
-  const location = useLocation();
-  console.log("ScheduleEase: ", location);
+const Navbar = ({ isDashboard }) => {
+  const { user, logOut } = useAuth();
+
   return (
     <div className="flex  w-full flex-col">
-      <header className="sticky  justify-between top-0 flex h-16 items-center gap-4 border-b  px-4 md:px-6">
+      <header className="sticky z-10 bg-white justify-between top-0 flex h-16 items-center gap-4 border-b  px-4 md:px-6">
         <Sheet>
           <SheetTrigger asChild>
             <Button
@@ -81,10 +80,10 @@ const Navbar = () => {
           <div className="ml-auto flex-1 sm:flex-initial">
             <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
               <Link
-                to="/appointment"
+                to="/appointment/recieve"
                 className="text-muted-foreground transition-colors hover:text-foreground"
               >
-                Dashboard
+                Appointments
               </Link>
               <Link
                 to="/login"
@@ -95,46 +94,63 @@ const Navbar = () => {
             </nav>{" "}
           </div>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="secondary" size="icon" className="rounded-full">
-                <CircleUser className="h-5 w-5" />
-                <span className="sr-only">Toggle user menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {user && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  className="rounded-full"
+                >
+                  <CircleUser className="h-5 w-5" />
+                  <span className="sr-only">Toggle user menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem>
+                  <div className="flex px-4 flex-col items-center justify-center gap-y-2">
+                    <p className="font-medium"> My Account</p>
+
+                    <img
+                      src="user-avatar.svg"
+                      alt="User Avator"
+                      className="w-12 h-12"
+                    />
+                    <p className="text-sm">{user?.email}</p>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={logOut}
+                  className="cursor-pointer bg-primary  flex justify-center rounded text-white"
+                >
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </header>
-      {location.pathname.includes("/appointment") && (
-        <main className="md:flex hidden   min-h-[calc(100vh_-_theme(spacing.16))] w-full flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
-          <div className="mx-auto lg:mx-4 grid w-full max-w-6xl gap-2">
-            <h1 className="text-3xl font-semibold">Dashboard</h1>
-          </div>
-          <div className="mx-auto lg:mx-4 grid w-full max-w-6xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr] ">
-            <nav className="grid gap-4 text-sm text-muted-foreground">
-              <Link to="/appointment" className="font-semibold text-primary">
+      {isDashboard && (
+        <div className="flex min-h-[90vh]    border-l  w-full  gap-4 bg-muted/40 ">
+          <div className="min-w-[320px] max-w-[350px] p-6 hidden md:block  border-r ">
+            <nav className="grid gap-4  text-sm text-muted-foreground">
+              <div className="mx-auto  lg:mx-4 grid w-full max-w-6xl gap-2">
+                <h1 className="text-xl mb-12 font-semibold">
+                  Appointment Dashboard
+                </h1>
+              </div>
+              <NavLink to="/appointment/recieve" className="font-semibold ">
                 Received Appointments
-              </Link>
-              <Link
-                to="/appointment/sent"
-                className="font-semibold text-primary"
-              >
+              </NavLink>
+              <NavLink to="/appointment/sent" className="font-semibold ">
                 Sent Appointments
-              </Link>
+              </NavLink>
             </nav>
-            <div className="grid gap-6">
-              <Outlet />
-            </div>
           </div>
-        </main>
+          <div className="flex-1 gap-6">
+            <Outlet />
+          </div>
+        </div>
       )}
     </div>
   );

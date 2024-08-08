@@ -32,7 +32,7 @@ const router = createBrowserRouter([
     element: <DashboardLayout />,
     children: [
       {
-        path: "",
+        path: "recieve",
         element: <ReceivedAppointments />,
       },
       {

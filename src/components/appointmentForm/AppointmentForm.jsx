@@ -1,6 +1,8 @@
 import { createAppointment } from "@/services/appointmentService";
+import { createPromiseToast } from "@/utils/promiseToast";
 import { appointmentSchema } from "@/utils/validator";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { DialogTitle } from "@radix-ui/react-dialog";
 import { Timestamp } from "firebase/firestore";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -17,7 +19,12 @@ import {
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
-const AppointmentForm = ({ currentUserId, targetUserId, currentUserName }) => {
+const AppointmentForm = ({
+  currentUserId,
+  targetUserId,
+  currentUserName,
+  onSetAppointmentDialog,
+}) => {
   const form = useForm({
     resolver: yupResolver(appointmentSchema),
   });
@@ -26,6 +33,8 @@ const AppointmentForm = ({ currentUserId, targetUserId, currentUserName }) => {
   // Assuming you have this in your auth context
 
   const onSubmit = async (values) => {
+    const toast = createPromiseToast();
+    const { successToast } = toast();
     setSubmitError("");
     const appointmentData = {
       title: values.title,
@@ -43,36 +52,25 @@ const AppointmentForm = ({ currentUserId, targetUserId, currentUserName }) => {
     try {
       const audioFile = audioRef.current?.files[0] || null;
       await createAppointment(appointmentData, audioFile);
-      // Close the form or navigate away
+      successToast({ message: "Appointment created successfully" });
+      form.reset();
+      onSetAppointmentDialog(false);
     } catch (error) {
       console.error("Error creating appointment:", error);
       setSubmitError("Failed to create appointment. Please try again.");
     }
   };
-  // const onSubmit = async (data) => {
-  //   try {
-  //     await createAppointment({
-  //       title: data.title,
-  //       description: data.description,
-  //       date: new Date(data.date),
-  //       time: data.time,
-  //       schedulerId: currentUserId,
-  //       schedulerName: currentUserName,
-  //       holderId: targetUserId,
-  //     });
-  //     // Show success message or redirect
-  //   } catch (error) {
-  //     console.error("Error creating appointment:", error);
-  //   }
-  // };
+
   return (
-    <Card className="w-full mx-auto p-4 border-none ">
+    <Card className="w-full mx-auto border-none ">
       <CardHeader>
-        <h2 className="text-xl font-bold">Create Appointment</h2>
+        <DialogTitle className="font-semibold text-2xl">
+          Create an appointment
+        </DialogTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
             <FormField
               control={form.control}
               name="title"
@@ -141,10 +139,7 @@ const AppointmentForm = ({ currentUserId, targetUserId, currentUserName }) => {
             {submitError && (
               <p className="text-red-500 text-xs">{submitError}</p>
             )}
-            <Button
-              type="submit"
-              className="w-full bg-blue-500 text-white p-2 rounded"
-            >
+            <Button type="submit" className="w-full">
               Create Appointment
             </Button>
           </form>

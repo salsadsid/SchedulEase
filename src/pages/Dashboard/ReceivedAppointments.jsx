@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 const ReceivedAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState("upcoming");
+  const [filter, setFilter] = useState("all");
   console.log("SchedulEase Mark 3", appointments);
   const { user: currentUser } = useAuth();
   console.log(currentUser);
@@ -62,7 +62,7 @@ const ReceivedAppointments = () => {
       if (filter === "past") {
         return dayjs(appointment.date.toDate()).isBefore(now);
       }
-      return true;
+      return appointment;
     });
   return (
     <div className="container mx-auto p-4">
@@ -81,6 +81,7 @@ const ReceivedAppointments = () => {
           onChange={handleFilterChange}
           className="p-2 border rounded w-full"
         >
+          <option value="all">All</option>
           <option value="upcoming">Upcoming</option>
           <option value="past">Past</option>
         </select>

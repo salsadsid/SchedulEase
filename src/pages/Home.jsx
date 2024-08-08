@@ -1,17 +1,19 @@
 import AppointmentForm from "@/components/appointmentForm/AppointmentForm";
 import CompanyName from "@/components/common/CompanyName";
+import Loading from "@/components/common/Loading";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useAuth } from "@/context/AuthContext";
 import { getUsers } from "@/services/userServices";
-import { CircleUserRound } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Home = () => {
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, loading } = useAuth();
+
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-
+  const [appointmentDialog, setAppointmentDialog] = useState(false);
   useEffect(() => {
     const fetchUsers = async () => {
       const usersData = await getUsers(currentUser?.uid);
@@ -31,51 +33,90 @@ const Home = () => {
   );
   return (
     <div className=" mx-auto">
-      <div className="relative overflow-hidden">
-        <div
-          aria-hidden="true"
-          className="flex absolute   start-1/2 transform -translate-x-1/2"
-        >
-          <div className="bg-gradient-to-r from-violet-300/50 to-purple-100 blur-3xl w-[25rem] h-[44rem] rotate-[-60deg] transform -translate-x-[10rem] dark:from-violet-900/50 dark:to-purple-900"></div>
-          <div className="bg-gradient-to-tl from-blue-50 via-blue-100 to-blue-50 blur-3xl w-[90rem] h-[50rem] rounded-fulls origin-top-left -rotate-12 -translate-x-[15rem] dark:from-indigo-900/70 dark:via-indigo-900/70 dark:to-blue-900/70"></div>
-        </div>
-
-        <div className="relative z-10 ">
-          <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-6 lg:pt-16">
-            <div className="max-w-2xl text-center mx-auto">
-              <div className="w-full max-w-4xl mx-auto sm:px-12 mb-10 lg:mb-8">
-                <h1 className="font-inter font-bold text-4xl leading-snug sm:text-5xl text-center mb-5 text-black">
+      <div className="container">
+        <div className=" pt-16 md:pt-20">
+          <div className=" px-4 mx-auto">
+            <div className="flex flex-wrap xl:items-center -mx-4">
+              <div className="w-full md:w-1/2 px-4 mb-16 md:mb-0">
+                <span className="inline-block py-px px-2 mb-4 text-xs leading-5 text-white bg-primary uppercase rounded-9xl">
+                  Growing
+                </span>
+                <h1 className="mb-6 text-3xl md:text-5xl lg:text-6xl leading-tight font-bold ">
                   Effortless Appointment Management
                 </h1>
-                <p className="text-xl font-medium leading-8 text-gray-400 text-center mb-14 max-w-xl mx-auto">
+                <p className="mb-8 text-lg md:text-xl text-coolGray-500 font-medium">
                   Stay organized, stay on top of your schedule. With{" "}
                   <CompanyName className="text-xl" />, managing your
                   appointments has never been easier.
                 </p>
-                <div className="parent flex flex-col sm:flex-row items-center max-w-xl mx-auto justify-center gap-y-4 sm:justify-between pr-2 sm:pr-1 sm:bg-white rounded-full mb-5 relative group transition-all duration-500 border border-transparent hover:border-indigo-600 focus-within:border-indigo-600">
-                  <input
-                    type="text"
-                    className="block w-full px-6 py-3.5 text-base max-sm:text-center font-normal shadow-xs max-sm:bg-white text-gray-900 bg-transparent border-none rounded-full placeholder-gray-400 focus:outline-none leading-normal"
-                    placeholder="Search users..."
-                    value={searchTerm}
-                    onChange={handleSearch}
+                <div className="flex flex-wrap">
+                  <div className="w-full md:w-auto py-1 md:py-0 md:mr-4">
+                    <Link
+                      className="inline-block py-3 px-7 w-full text-base md:text-lg leading-4 text-indigo-50 font-medium text-center bg-indigo-500 hover:bg-indigo-600 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 border border-indigo-500 rounded-md shadow-sm"
+                      href="#"
+                    >
+                      Request a Demo
+                    </Link>
+                  </div>
+                  <div className="w-full md:w-auto py-1 md:py-0">
+                    <Link
+                      className="inline-block py-3 px-7 w-full text-base md:text-lg leading-4 text-indigo-800 font-medium text-center bg-white hover:bg-indigo-100 focus:ring-2 focus:ring-indigo-200 focus:ring-opacity-50 border border-indigo-200 rounded-md shadow-sm"
+                      to="signup"
+                    >
+                      Sign Up
+                    </Link>
+                  </div>
+                </div>
+              </div>
+              <div className="md:block hidden md:w-1/2 px-4">
+                <div className="relative mx-auto md:mr-0 max-w-max">
+                  <img
+                    className="relative rounded-7xl"
+                    src="appointment.png"
+                    alt=""
                   />
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="mt-6 container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {filteredUsers.map((user) => (
-          <div
-            key={user.id}
-            className="max-w-md rounded p-px bg-gradient-to-b from-blue-300 to-pink-300 dark:from-blue-800 dark:to-purple-800 "
-          >
-            <div className="rounded p-6 bg-white dark:bg-gray-900">
+        <div className="mt-6 max-w-xl bg-gray-100 mx-auto p-4 shadow-md border rounded hover:shadow-lg ">
+          <div className="flex bg-white px-4 py-3 rounded border overflow-hidden max-w-xl mx-auto ">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 192.904 192.904"
+              width="16px"
+              className="fill-gray-600 mr-3 rotate-90"
+            >
+              <path d="m190.707 180.101-47.078-47.077c11.702-14.072 18.752-32.142 18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z"></path>
+            </svg>
+            <input
+              type="text"
+              placeholder="Search users..."
+              value={searchTerm}
+              onChange={handleSearch}
+              className="w-full text-md outline-none bg-transparent text-gray-600 "
+            />
+          </div>
+        </div>
+        {loading && (
+          <div className="py-20 flex justify-center">
+            <Loading />
+          </div>
+        )}
+        <div className="my-12  flex justify-center items-start flex-wrap gap-6">
+          {filteredUsers.map((user) => (
+            <div
+              key={user.id}
+              className="w-full md:max-w-[320px] rounded border border-primary p-6"
+            >
               <div className="flex flex-col gap-y-4 ">
-                <div className="flex items-center gap-2">
-                  <CircleUserRound />
+                <div className="flex items-center gap-4">
+                  <img
+                    src="user-avatar.svg"
+                    alt="User Avator"
+                    className="w-12 h-12"
+                  />
                   <div>
                     <h3 className="text-lg font-medium text-gray-700 dark:text-white">
                       {user.name}
@@ -85,22 +126,38 @@ const Home = () => {
                     </span>
                   </div>
                 </div>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button>Create Appointment</Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px] ">
-                    <AppointmentForm
-                      currentUserId={currentUser?.uid}
-                      targetUserId={user.id}
-                      currentUserName={user.name}
-                    />
-                  </DialogContent>
-                </Dialog>
+                {currentUser ? (
+                  <Dialog
+                    open={appointmentDialog}
+                    onOpenChange={setAppointmentDialog}
+                  >
+                    <DialogTrigger asChild>
+                      <Button>Create Appointment</Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <AppointmentForm
+                        currentUserId={currentUser?.uid}
+                        targetUserId={user.id}
+                        currentUserName={user.name}
+                        onSetAppointmentDialog={setAppointmentDialog}
+                      />
+                    </DialogContent>
+                  </Dialog>
+                ) : (
+                  <p className="text-center text-sm bg-orange-50 p-2 rounded-md">
+                    <Link
+                      className="text-indigo-500 hover:underline"
+                      to="/login"
+                    >
+                      Sign in
+                    </Link>{" "}
+                    to schedule your appointment
+                  </p>
+                )}
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -11,7 +11,10 @@ import {
 const usersCollection = collection(db, "users");
 
 export const getUsers = async (currentUserId) => {
-  const q = query(usersCollection, where("id", "!=", currentUserId));
+  const q = query(
+    usersCollection,
+    where("id", "!=", currentUserId ? currentUserId : "")
+  );
   const snapshot = await getDocs(q);
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
