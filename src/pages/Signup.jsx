@@ -26,19 +26,22 @@ const Signup = () => {
     defaultValues: initialSignupFormValue,
   });
   const onSubmit = async (values) => {
+    // Initialize a promise-based toast notification system
     const toast = createPromiseToast();
     const { successToast, errorToast } = toast();
     try {
+      // Attempt to sign up the user with the provided email and password
       const userCredential = await signUp(values.email, values.password);
       const user = userCredential.user;
-      console.log(user);
+
+      // Create a new user document in the database with the provided name, email, and user ID
       await createUser({
         id: user.uid,
         name: values.name,
         email: values.email,
         createdAt: new Date(),
       });
-      successToast({ message: "Signup Successful..." });
+      successToast({ message: "Signup Successful" });
       navigate("/");
     } catch (error) {
       console.log(error);

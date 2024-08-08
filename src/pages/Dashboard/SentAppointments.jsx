@@ -19,6 +19,8 @@ const SentAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(false);
   const { user: currentUser } = useAuth();
+
+  // useEffect hook to fetch appointments when the currentUser changes
   useEffect(() => {
     setLoading(true);
     if (currentUser?.uid) {
@@ -31,6 +33,7 @@ const SentAppointments = () => {
     }
   }, [currentUser]);
 
+  // Function to handle appointment cancellation
   const handleCancelAppointment = async (appointmentId) => {
     await cancelAppointment(appointmentId);
     // Update the local state to reflect the change

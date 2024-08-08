@@ -35,11 +35,14 @@ const AppointmentForm = ({
   const [loading, setLoading] = useState(false);
   const audioRef = useRef(null);
 
+  // Function to handle form submission
   const onSubmit = async (values) => {
     const toast = createPromiseToast();
     const { successToast } = toast();
     setLoading(true);
     setSubmitError("");
+
+    // Prepare the appointment data based on form values
     const appointmentData = {
       title: values.title,
       description: values.description,
@@ -53,7 +56,10 @@ const AppointmentForm = ({
       status: "pending",
     };
     try {
+      // Get the selected audio file from the input element, if any
       const audioFile = audioRef.current?.files[0] || null;
+
+      // Call the service to create the appointment with optional audio file
       await createAppointment(appointmentData, audioFile);
       successToast({ message: "Appointment created successfully" });
       form.reset();

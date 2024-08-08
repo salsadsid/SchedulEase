@@ -23,6 +23,7 @@ const ReceivedAppointments = () => {
   const [filter, setFilter] = useState("all");
   const { user: currentUser } = useAuth();
 
+  // useEffect hook to fetch appointments when the currentUser changes
   useEffect(() => {
     setLoading(true);
     if (currentUser?.uid) {
@@ -35,13 +36,17 @@ const ReceivedAppointments = () => {
     }
   }, [currentUser]);
 
+  // Function to handle search input changes
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
 
+  // Function to handle filter selection changes
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
   };
+
+  // Function to handle appointment status updates (e.g., accepting or declining an appointment)
   const handleUpdateStatus = async (appointmentId, status) => {
     await updateAppointmentStatus(appointmentId, status);
     // Update the local state to reflect the change
@@ -53,7 +58,10 @@ const ReceivedAppointments = () => {
       )
     );
   };
+  // Get the current date and time using dayjs
   const now = dayjs();
+
+  // Filter appointments based on search term and selected filter
   const filteredAppointments = appointments
     .filter(
       (appointment) =>
@@ -69,6 +77,7 @@ const ReceivedAppointments = () => {
       }
       return appointment;
     });
+
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-lg font-semibold text-gray-500 py-2 pb-6">
