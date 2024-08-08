@@ -4,6 +4,7 @@ import ReceivedAppointments from "@/pages/Dashboard/ReceivedAppointments";
 import SentAppointments from "@/pages/Dashboard/SentAppointments";
 import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
+import RequireAuth from "@/utils/RequireAuth";
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
 import Home from "../pages/Home";
@@ -29,7 +30,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/appointment",
-    element: <DashboardLayout />,
+    element: (
+      <RequireAuth>
+        <DashboardLayout />
+      </RequireAuth>
+    ),
     children: [
       {
         path: "recieve",

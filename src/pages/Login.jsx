@@ -24,6 +24,7 @@ const Login = () => {
     defaultValues: initialLoginFormValue,
   });
   const navigate = useNavigate();
+
   const { signIn, loading, user, setLoading } = useAuth();
   const onSubmit = async (values) => {
     const toast = createPromiseToast();

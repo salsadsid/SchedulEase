@@ -1,5 +1,5 @@
 import { useAuth } from "@/context/AuthContext";
-import { CircleUser, Menu, Package2 } from "lucide-react";
+import { CircleUser, Menu } from "lucide-react";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { Button } from "../ui/button";
 import {
@@ -31,39 +31,42 @@ const Navbar = ({ isDashboard }) => {
           <SheetContent side="left">
             <nav className="grid gap-6 text-lg font-medium">
               <Link
-                href="#"
+                to="/"
                 className="flex items-center gap-2 text-lg font-semibold"
               >
-                <Package2 className="h-6 w-6" />
-                <span className="sr-only">Acme Inc</span>
+                <CompanyName className="text-xl" />
               </Link>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Dashboard
-              </Link>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Orders
-              </Link>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Products
-              </Link>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Customers
-              </Link>
-              <Link href="#" className="hover:text-foreground">
-                Settings
-              </Link>
+              {user ? (
+                <>
+                  <NavLink
+                    to="/appointment/recieve"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Received Appointments
+                  </NavLink>
+                  <NavLink
+                    to="/appointment/sent"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Sent Appointments
+                  </NavLink>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/appointment/recieve"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Appointments
+                  </Link>
+                  <Link
+                    to="login"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Login
+                  </Link>
+                </>
+              )}
             </nav>
           </SheetContent>
         </Sheet>
@@ -85,12 +88,14 @@ const Navbar = ({ isDashboard }) => {
               >
                 Appointments
               </Link>
-              <Link
-                to="/login"
-                className="text-muted-foreground transition-colors hover:text-foreground"
-              >
-                Login
-              </Link>
+              {!user && (
+                <Link
+                  to="/login"
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Login
+                </Link>
+              )}
             </nav>{" "}
           </div>
 

@@ -14,9 +14,14 @@ const Home = () => {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [appointmentDialog, setAppointmentDialog] = useState(false);
+  const [currentUserData, setCurrentUserData] = useState(null);
+
   useEffect(() => {
     const fetchUsers = async () => {
-      const usersData = await getUsers(currentUser?.uid);
+      const usersData = await getUsers();
+      setCurrentUserData(
+        usersData.find((user) => user.id === currentUser?.uid)
+      );
       setUsers(usersData);
     };
     fetchUsers();
@@ -26,11 +31,13 @@ const Home = () => {
     setSearchTerm(e.target.value);
   };
 
-  const filteredUsers = users.filter(
-    (user) =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredUsers = users
+    .filter((user) => user.id !== currentUser?.uid)
+    .filter(
+      (user) =>
+        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   return (
     <div className=" mx-auto">
       <div className="container">
@@ -138,7 +145,8 @@ const Home = () => {
                       <AppointmentForm
                         currentUserId={currentUser?.uid}
                         targetUserId={user.id}
-                        currentUserName={user.name}
+                        currentUserName={currentUserData.name}
+                        targetUserName={user.name}
                         onSetAppointmentDialog={setAppointmentDialog}
                       />
                     </DialogContent>

@@ -22,6 +22,7 @@ import { Textarea } from "../ui/textarea";
 const AppointmentForm = ({
   currentUserId,
   targetUserId,
+  targetUserName,
   currentUserName,
   onSetAppointmentDialog,
 }) => {
@@ -44,6 +45,7 @@ const AppointmentForm = ({
       schedulerId: currentUserId,
       schedulerName: currentUserName,
       holderId: targetUserId,
+      holderName: targetUserName,
       createdAt: Timestamp.now(),
       status: "pending",
     };
