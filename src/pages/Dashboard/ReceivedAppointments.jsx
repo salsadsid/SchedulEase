@@ -53,6 +53,7 @@ const ReceivedAppointments = () => {
       )
     );
   };
+  const now = dayjs();
   const filteredAppointments = appointments
     .filter(
       (appointment) =>
@@ -60,7 +61,6 @@ const ReceivedAppointments = () => {
         appointment.description.toLowerCase().includes(searchTerm.toLowerCase())
     )
     .filter((appointment) => {
-      const now = dayjs();
       if (filter === "upcoming") {
         return dayjs(appointment.date.toDate()).isAfter(now);
       }
@@ -151,25 +151,26 @@ const ReceivedAppointments = () => {
                 )}
               </CardContent>
               <CardFooter>
-                {appointment.status === "pending" && filter !== "past" && (
-                  <div className="flex space-x-2 mt-4">
-                    <Button
-                      onClick={() =>
-                        handleUpdateStatus(appointment.id, "accepted")
-                      }
-                    >
-                      Accept
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      onClick={() =>
-                        handleUpdateStatus(appointment.id, "declined")
-                      }
-                    >
-                      Decline
-                    </Button>
-                  </div>
-                )}
+                {dayjs(appointment.date.toDate()).isAfter(now) &&
+                  appointment.status === "pending" && (
+                    <div className="flex space-x-2 mt-4">
+                      <Button
+                        onClick={() =>
+                          handleUpdateStatus(appointment.id, "accepted")
+                        }
+                      >
+                        Accept
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        onClick={() =>
+                          handleUpdateStatus(appointment.id, "declined")
+                        }
+                      >
+                        Decline
+                      </Button>
+                    </div>
+                  )}
               </CardFooter>
             </Card>
           ))}

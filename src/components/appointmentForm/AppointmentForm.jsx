@@ -2,8 +2,9 @@ import { createAppointment } from "@/services/appointmentService";
 import { createPromiseToast } from "@/utils/promiseToast";
 import { appointmentSchema } from "@/utils/validator";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { DialogTitle } from "@radix-ui/react-dialog";
+import { DialogClose, DialogTitle } from "@radix-ui/react-dialog";
 import { Timestamp } from "firebase/firestore";
+import { Loader2 } from "lucide-react";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
@@ -24,18 +25,18 @@ const AppointmentForm = ({
   targetUserId,
   targetUserName,
   currentUserName,
-  onSetAppointmentDialog,
 }) => {
   const form = useForm({
     resolver: yupResolver(appointmentSchema),
   });
   const [submitError, setSubmitError] = useState("");
+  const [loading, setLoading] = useState(false);
   const audioRef = useRef(null);
-  // Assuming you have this in your auth context
 
   const onSubmit = async (values) => {
     const toast = createPromiseToast();
     const { successToast } = toast();
+    setLoading(true);
     setSubmitError("");
     const appointmentData = {
       title: values.title,
@@ -49,17 +50,17 @@ const AppointmentForm = ({
       createdAt: Timestamp.now(),
       status: "pending",
     };
-    console.log("Schedule Mark 1:", appointmentData);
-    console.log("Schedule Mark 2:", audioRef.current?.files[0]);
     try {
       const audioFile = audioRef.current?.files[0] || null;
       await createAppointment(appointmentData, audioFile);
       successToast({ message: "Appointment created successfully" });
       form.reset();
-      onSetAppointmentDialog(false);
+      document.getElementById("closeDialog")?.click();
     } catch (error) {
       console.error("Error creating appointment:", error);
       setSubmitError("Failed to create appointment. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -132,7 +133,7 @@ const AppointmentForm = ({
                 <FormItem>
                   <FormLabel>Audio Message</FormLabel>
                   <FormControl>
-                    <Input type="file" accept="audio/*" ref={audioRef} />
+                    <Input type="file" accept="audio/mp3" ref={audioRef} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -141,9 +142,18 @@ const AppointmentForm = ({
             {submitError && (
               <p className="text-red-500 text-xs">{submitError}</p>
             )}
-            <Button type="submit" className="w-full">
-              Create Appointment
+
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </>
+              ) : (
+                "Create Appointment"
+              )}
             </Button>
+            <DialogClose />
           </form>
         </Form>
       </CardContent>

@@ -107,8 +107,8 @@ const SentAppointments = () => {
                     className={`p-2 ${
                       dayjs().isAfter(dayjs(appointment.date.toDate()))
                         ? "bg-gray-500"
-                        : "bg-red-500"
-                    } text-white rounded mt-4`}
+                        : ""
+                    } `}
                     onClick={() => handleCancelAppointment(appointment.id)}
                     disabled={dayjs().isAfter(dayjs(appointment.date.toDate()))}
                   >

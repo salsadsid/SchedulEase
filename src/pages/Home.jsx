@@ -10,18 +10,19 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
   const { user: currentUser, loading } = useAuth();
-
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [appointmentDialog, setAppointmentDialog] = useState(false);
   const [currentUserData, setCurrentUserData] = useState(null);
+  const [userLoading, setUserLoading] = useState(false);
 
   useEffect(() => {
+    setUserLoading(true);
     const fetchUsers = async () => {
       const usersData = await getUsers();
       setCurrentUserData(
         usersData.find((user) => user.id === currentUser?.uid)
       );
+      setUserLoading(false);
       setUsers(usersData);
     };
     fetchUsers();
@@ -31,6 +32,7 @@ const Home = () => {
     setSearchTerm(e.target.value);
   };
 
+  const loadingState = loading || userLoading;
   const filteredUsers = users
     .filter((user) => user.id !== currentUser?.uid)
     .filter(
@@ -38,6 +40,7 @@ const Home = () => {
         user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
   return (
     <div className=" mx-auto">
       <div className="container">
@@ -106,65 +109,67 @@ const Home = () => {
             />
           </div>
         </div>
-        {loading && (
+        {loadingState && (
           <div className="py-20 flex justify-center">
             <Loading />
           </div>
         )}
         <div className="my-12  flex justify-center items-start flex-wrap gap-6">
-          {filteredUsers.map((user) => (
-            <div
-              key={user.id}
-              className="w-full md:max-w-[320px] rounded border border-primary p-6"
-            >
-              <div className="flex flex-col gap-y-4 ">
-                <div className="flex items-center gap-4">
-                  <img
-                    src="user-avatar.svg"
-                    alt="User Avator"
-                    className="w-12 h-12"
-                  />
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-700 dark:text-white">
-                      {user.name}
-                    </h3>
-                    <span className="text-sm tracking-wide text-gray-600 dark:text-gray-400">
-                      {user.email}
-                    </span>
+          {filteredUsers?.length > 0 &&
+            filteredUsers.map((user) => (
+              <div
+                key={user.id}
+                className="w-full shadow hover:shadow-lg transition-all duration-200 md:max-w-[350px] rounded border border-primary p-6"
+              >
+                <div className="flex flex-col gap-y-4 ">
+                  <div className="flex items-center gap-4">
+                    <img
+                      src="user-avatar.svg"
+                      alt="User Avator"
+                      className="w-12 h-12"
+                    />
+                    <div>
+                      <h3 className="text-lg font-medium text-gray-700 dark:text-white">
+                        {user.name}
+                      </h3>
+                      <span className="text-sm tracking-wide text-gray-600 dark:text-gray-400">
+                        {user.email}
+                      </span>
+                    </div>
                   </div>
+                  {currentUser ? (
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button>Create Appointment</Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <AppointmentForm
+                          currentUserId={currentUser?.uid}
+                          currentUserName={currentUserData?.name}
+                          targetUserId={user.id}
+                          targetUserName={user.name}
+                        />
+                      </DialogContent>
+                    </Dialog>
+                  ) : (
+                    <p className="text-center text-sm bg-orange-50 p-2 rounded-md">
+                      <Link
+                        className="text-indigo-500 hover:underline"
+                        to="/login"
+                      >
+                        Sign in
+                      </Link>{" "}
+                      to schedule your appointment
+                    </p>
+                  )}
                 </div>
-                {currentUser ? (
-                  <Dialog
-                    open={appointmentDialog}
-                    onOpenChange={setAppointmentDialog}
-                  >
-                    <DialogTrigger asChild>
-                      <Button>Create Appointment</Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <AppointmentForm
-                        currentUserId={currentUser?.uid}
-                        targetUserId={user.id}
-                        currentUserName={currentUserData.name}
-                        targetUserName={user.name}
-                        onSetAppointmentDialog={setAppointmentDialog}
-                      />
-                    </DialogContent>
-                  </Dialog>
-                ) : (
-                  <p className="text-center text-sm bg-orange-50 p-2 rounded-md">
-                    <Link
-                      className="text-indigo-500 hover:underline"
-                      to="/login"
-                    >
-                      Sign in
-                    </Link>{" "}
-                    to schedule your appointment
-                  </p>
-                )}
               </div>
+            ))}
+          {!loadingState && filteredUsers?.length < 1 && (
+            <div>
+              <p>No user(s) found.</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>

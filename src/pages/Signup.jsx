@@ -39,6 +39,7 @@ const Signup = () => {
         createdAt: new Date(),
       });
       successToast({ message: "Signup Successful..." });
+      navigate("/");
     } catch (error) {
       console.log(error);
       errorToast({ message: error.message });
@@ -67,9 +68,9 @@ const Signup = () => {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Name</FormLabel>
+                      <FormLabel>Full Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="name" {...field} />
+                        <Input placeholder="Full name" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
