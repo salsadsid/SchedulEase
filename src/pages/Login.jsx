@@ -26,11 +26,17 @@ const Login = () => {
 
   const { signIn, loading, user, setLoading } = useAuth();
   const onSubmit = async (values) => {
+    // Initialize a promise-based toast notification system
     const toast = createPromiseToast();
     const { successToast, errorToast } = toast();
     try {
+      // Attempt to sign in the user with the provided email and password
       const result = await signIn(values.email, values.password);
-      if (user?.uid) successToast({ message: "Login Successful." });
+
+      // If the user is successfully authenticated, show a success toast message
+      if (user?.uid) successToast({ message: "Login Successful" });
+
+      // Redirect the user to the homepage after successful login
       navigate("/");
     } catch (error) {
       errorToast({ message: error.message });
