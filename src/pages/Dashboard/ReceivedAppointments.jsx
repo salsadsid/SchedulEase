@@ -21,9 +21,8 @@ const ReceivedAppointments = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("all");
-  console.log("SchedulEase Mark 3", appointments);
   const { user: currentUser } = useAuth();
-  console.log(currentUser);
+
   useEffect(() => {
     setLoading(true);
     if (currentUser?.uid) {
@@ -45,6 +44,7 @@ const ReceivedAppointments = () => {
   };
   const handleUpdateStatus = async (appointmentId, status) => {
     await updateAppointmentStatus(appointmentId, status);
+    // Update the local state to reflect the change
     setAppointments((prevAppointments) =>
       prevAppointments.map((appointment) =>
         appointment.id === appointmentId

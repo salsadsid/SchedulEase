@@ -82,7 +82,7 @@ const AppointmentForm = ({
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title</FormLabel>
+                  <FormLabel>Title*</FormLabel>
                   <FormControl>
                     <Input type="text" {...field} />
                   </FormControl>
@@ -95,7 +95,7 @@ const AppointmentForm = ({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Description*</FormLabel>
                   <FormControl>
                     <Textarea {...field} />
                   </FormControl>
@@ -108,7 +108,7 @@ const AppointmentForm = ({
               name="date"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Date</FormLabel>
+                  <FormLabel>Date*</FormLabel>
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>
@@ -121,7 +121,7 @@ const AppointmentForm = ({
               name="time"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Time</FormLabel>
+                  <FormLabel>Time*</FormLabel>
                   <FormControl>
                     <Input type="time" {...field} />
                   </FormControl>
@@ -134,7 +134,7 @@ const AppointmentForm = ({
               name="audioMessage"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Audio Message</FormLabel>
+                  <FormLabel>Audio Message (Optional)</FormLabel>
                   <FormControl>
                     <Input type="file" accept="audio/mp3" ref={audioRef} />
                   </FormControl>

@@ -19,7 +19,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
-  const { signUp, user, loading, setLoading } = useAuth();
+  const { signUp, loading, setLoading } = useAuth();
   const navigate = useNavigate();
   const form = useForm({
     resolver: yupResolver(signUpFormSchema),
