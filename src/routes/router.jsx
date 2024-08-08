@@ -4,6 +4,7 @@ import ReceivedAppointments from "@/pages/Dashboard/ReceivedAppointments";
 import SentAppointments from "@/pages/Dashboard/SentAppointments";
 import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
+import Users from "@/pages/Users";
 import RequireAuth from "@/utils/RequireAuth";
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "signup",
         element: <Signup />,
+      },
+      {
+        path: "users",
+        element: <Users />,
       },
     ],
   },
@@ -49,10 +54,3 @@ const router = createBrowserRouter([
 ]);
 
 export default router;
-
-//TODO
-/*
- implement errorElement
- remove unused css shadcn theme 
-remove unused shadcn components : alert
-*/

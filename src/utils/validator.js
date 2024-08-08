@@ -1,5 +1,6 @@
 import * as Yup from "yup";
 
+// Validation schema for the login form
 export const loginFormSchema = Yup.object().shape({
   email: Yup.string()
     .email("Email is not valid.")
@@ -10,6 +11,7 @@ export const loginFormSchema = Yup.object().shape({
     .required("Password is required."),
 });
 
+// Validation schema for the sign-up form
 export const signUpFormSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, "Name should be at least 6 characters")
@@ -23,6 +25,7 @@ export const signUpFormSchema = Yup.object().shape({
     .required("Password is required."),
 });
 
+// Validation schema for the appointment form
 export const appointmentSchema = Yup.object().shape({
   title: Yup.string().required("Title is required"),
   description: Yup.string().required("Description is required"),

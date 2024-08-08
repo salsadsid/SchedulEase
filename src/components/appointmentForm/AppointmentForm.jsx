@@ -7,6 +7,7 @@ import { Timestamp } from "firebase/firestore";
 import { Loader2 } from "lucide-react";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import {
@@ -29,6 +30,7 @@ const AppointmentForm = ({
   const form = useForm({
     resolver: yupResolver(appointmentSchema),
   });
+  const navigate = useNavigate();
   const [submitError, setSubmitError] = useState("");
   const [loading, setLoading] = useState(false);
   const audioRef = useRef(null);
@@ -56,6 +58,7 @@ const AppointmentForm = ({
       successToast({ message: "Appointment created successfully" });
       form.reset();
       document.getElementById("closeDialog")?.click();
+      navigate("/appointment/sent");
     } catch (error) {
       console.error("Error creating appointment:", error);
       setSubmitError("Failed to create appointment. Please try again.");
