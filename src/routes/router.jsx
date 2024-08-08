@@ -1,16 +1,55 @@
-import React from "react";
+import DashboardLayout from "@/layout/DashboardLayout";
+
+import ReceivedAppointments from "@/pages/Dashboard/ReceivedAppointments";
+import SentAppointments from "@/pages/Dashboard/SentAppointments";
+import Login from "@/pages/Login";
+import Signup from "@/pages/Signup";
+import Users from "@/pages/Users";
+import RequireAuth from "@/utils/RequireAuth";
 import { createBrowserRouter } from "react-router-dom";
-import About from "../pages/About";
+import MainLayout from "../layout/MainLayout";
 import Home from "../pages/Home";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <MainLayout />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "signup",
+        element: <Signup />,
+      },
+      {
+        path: "users",
+        element: <Users />,
+      },
+    ],
   },
   {
-    path: "/about",
-    element: <About />,
+    path: "/appointment",
+    element: (
+      <RequireAuth>
+        <DashboardLayout />
+      </RequireAuth>
+    ),
+    children: [
+      {
+        path: "recieve",
+        element: <ReceivedAppointments />,
+      },
+      {
+        path: "sent",
+        element: <SentAppointments />,
+      },
+    ],
   },
 ]);
 
